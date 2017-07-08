@@ -8,20 +8,6 @@
 #import random for the AI
 import random
 
-
-#Make a Board that the player can see
-print("""
-      TIC-TAC-TOE
-
-        |    |
-        |    |
-    ----|----|----
-        |    |
-    ----|----|----
-        |    |
-        |    |
-""")
-
 #make a board that the code can check
 board = [
     0,0,0,
@@ -31,27 +17,61 @@ board = [
 
 #we reuse this code a lot so we make it a function
 def choose():
-    choice = int(input("Pick a place to start (1-9)"))
-    
-    if(board[choice] > 0):
-        print("This has already been picked.... Please pick another")
-        choose()
+    choice = int(input("Choose a Box (0-8)"))
+
+    if(choice >= 0):
+        if(choice <= 8):
+            if(board[choice] > 0):
+                print("This has already been picked.... Please pick another")
+                choose()
+            else:
+                board[choice] = 1
+                computerChoice()
+        else:
+            choice()
     else:
-        drawBoard(1,choice)
-        computerChoice()
+        choice()
+    
 
 #Give the player an Enemy
 def computerChoice():
-    choice = random.randint(1,9)#a random number between 1 and 9
+    choice = random.randint(-1,9)
 
-    if(board[choice] > 0):          #computer picks a box already choosen
-       choice = random.randint(1,9) #try again
-
+    if(board[choice] > 0):
+        computerChoice()
     else:
-       drawBoard(2,choice)
+        board[choice] = 2
+        drawBoard()
 
-#Will handle showing the modified board to the user
-def drawBoard(player,choice):
-    print("Draw Board - Player: " + str(player) + ", Choice: " + str(choice))
+#Handles showing the board to the user
+def drawBoard():
+    print("\n" * 100)
+    cell = []
 
-choose()
+    for i in range(0,9):
+        if(board[i] == 1):
+            cell.append('X')
+        elif(board[i] == 2):
+            cell.append('O')
+        else:
+            cell.append(' ')
+
+    print("""
+    TICK-TAC-TOE!
+---------------------
+    """)
+    print("     |     |")
+    print("  " + cell[0] + "  |  " + cell[1] + "  |  " + cell[2])
+    print("     |     |")
+    print("-----|-----|-----")
+    print("     |     |")
+    print("  " + cell[3] + "  |  " + cell[4] + "  |  " + cell[5])
+    print("     |     |")
+    print("-----|-----|-----")
+    print("     |     |")
+    print("  " + cell[6] + "  |  " + cell[7] + "  |  " + cell[8])
+    print("     |     |")
+    
+    choose()
+
+drawBoard()
